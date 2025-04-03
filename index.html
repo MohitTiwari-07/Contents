@@ -3,116 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KMeans Prediction - Iris Dataset</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Iris Flower Cluster Predictor</title>
     <style>
         body {
-            background: linear-gradient(to right, #6a11cb, #2575fc);
-            color: white;
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
         .container {
-            max-width: 600px;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            padding: 40px;
+            background: white;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 16px;
+            text-align: center;
         }
         h1 {
-            font-size: 2rem;
-            margin-bottom: 20px;
+            color: #4A90E2;
+            margin-bottom: 24px;
         }
-        input {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: none;
-            border-radius: 5px;
+        p {
+            font-size: 18px;
+            margin-bottom: 32px;
+        }
+        input, button {
+            padding: 12px 20px;
+            font-size: 16px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
         }
         button {
-            background: #ff6f61;
+            background-color: #4A90E2;
             color: white;
-            border: none;
-            padding: 10px 20px;
             cursor: pointer;
-            font-size: 1.2rem;
-            border-radius: 5px;
+            transition: background 0.3s;
         }
         button:hover {
-            background: #ff3b2f;
+            background-color: #357ABD;
         }
-        .iris-info {
+        .images {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 32px;
+        }
+        .images img {
+            width: 200px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .card {
+            margin-top: 40px;
+            padding: 20px;
+            background: #fff;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-radius: 12px;
+            text-align: left;
+            max-width: 600px;
+        }
+        .card h2 {
+            color: #4A90E2;
+            margin-bottom: 16px;
+        }
+        .card p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+        .link {
+            display: inline-block;
             margin-top: 20px;
-            background: rgba(255, 255, 255, 0.3);
-            padding: 15px;
-            border-radius: 10px;
+            padding: 10px 20px;
+            background: #4A90E2;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: background 0.3s;
         }
-        .iris-info img {
-            width: 100%;
-            border-radius: 10px;
-        }
-        #result {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-top: 20px;
+        .link:hover {
+            background: #357ABD;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>KMeans Prediction - Iris Dataset</h1>
-        <p>Enter the features of an Iris flower, and we will predict its species using KMeans clustering.</p>
-
-        <form id="predictionForm">
-            <input type="number" id="sepalLength" name="sepalLength" step="any" placeholder="Sepal Length (cm)" required>
-            <input type="number" id="sepalWidth" name="sepalWidth" step="any" placeholder="Sepal Width (cm)" required>
-            <input type="number" id="petalLength" name="petalLength" step="any" placeholder="Petal Length (cm)" required>
-            <input type="number" id="petalWidth" name="petalWidth" step="any" placeholder="Petal Width (cm)" required>
+        <h1>Iris Flower Cluster Predictor</h1>
+        <p>Enter the sepal and petal dimensions to predict the Iris flower species.</p>
+        <form id="predict-form">
+            <input type="number" id="sepalLength" name="sepalLength" placeholder="Sepal Length (cm)" step="any" required>
+            <input type="number" id="sepalWidth" name="sepalWidth" placeholder="Sepal Width (cm)" step="any" required>
+            <input type="number" id="petalLength" name="petalLength" placeholder="Petal Length (cm)" step="any" required>
+            <input type="number" id="petalWidth" name="petalWidth" placeholder="Petal Width (cm)" step="any" required>
             <button type="submit">Predict</button>
         </form>
-
         <div id="result"></div>
-
-        <div class="iris-info">
-            <h3>About the Iris Dataset</h3>
-            <p>The Iris dataset is one of the most famous datasets in machine learning. It contains 150 samples from three species:</p>
+        <div class="images">
+            <img src="https://raw.githubusercontent.com/singhudaypratap/kmeans_clustering/refs/heads/main/templates/iris.svg" alt="Iris Flower">
+            <img src="https://github.com/singhudaypratap/kmeans_clustering/blob/main/templates/iristypes.png?raw=true" alt="Iris Flower Types">
+        </div>
+        <div class="card">
+            <h2>About the Iris Flower Dataset</h2>
+            <p>The Iris dataset is a classic dataset in machine learning, containing information about three species of iris flowers:</p>
             <ul>
-                <li><strong>Setosa</strong></li>
-                <li><strong>Versicolor</strong></li>
-                <li><strong>Virginica</strong></li>
+                <li><strong>Setosa:</strong> Known for its small size and distinct shape.</li>
+                <li><strong>Versicolor:</strong> Intermediate in size and form.</li>
+                <li><strong>Virginica:</strong> Larger and more robust compared to others.</li>
             </ul>
-            <img src="https://raw.githubusercontent.com/uiuc-cse/data-fa14/gh-pages/data/iris.png" alt="Iris Dataset Distribution" style="width:100%; border-radius:10px;">
-
+            <a href="#predict-form" class="link">Try Prediction Now</a>
         </div>
     </div>
 
     <script>
-        const form = document.getElementById('predictionForm');
-        form.addEventListener('submit', (event) => {
+        document.getElementById('predict-form').addEventListener('submit', function(event) {
             event.preventDefault();
-
             const data = {
-                data: [
-                    parseFloat(document.getElementById('sepalLength').value),
-                    parseFloat(document.getElementById('sepalWidth').value),
-                    parseFloat(document.getElementById('petalLength').value),
-                    parseFloat(document.getElementById('petalWidth').value)
-                ]
+                sepalLength: parseFloat(document.getElementById('sepalLength').value),
+                sepalWidth: parseFloat(document.getElementById('sepalWidth').value),
+                petalLength: parseFloat(document.getElementById('petalLength').value),
+                petalWidth: parseFloat(document.getElementById('petalWidth').value)
             };
 
             fetch('/predict', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify(data)
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok. Status: ' + response.status);
+                }
+                return response.json();
+            })
             .then(data => {
                 document.getElementById('result').innerText = 'Predicted Cluster: ' + data.cluster;
             })
             .catch(error => {
                 console.error('Error:', error);
+                document.getElementById('result').innerText = 'Prediction error. Check console for details.';
             });
         });
     </script>
